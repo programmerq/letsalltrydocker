@@ -1,0 +1,4 @@
+\usepackage{multicol}
+\makeatletter
+\def\verbatim{\small\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\makeatother
