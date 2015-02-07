@@ -431,7 +431,7 @@ It is now publically online for anyone to see/download: [https://registry.hub.do
 
 ###Private Registry
 
-You can run your own registry server ([https://github.com/docker/docker-registry](https://github.com/docker/docker-registry)). If you have one running at [https://registry.mycompany.com/,](https://registry.mycompany.com/,) then registry.mycompany.com is the namespace for the image name.
+You can run your own registry server ([https://github.com/docker/docker-registry](https://github.com/docker/docker-registry)).
 
     $ docker build -t registry.mycompany.com/apache
     $ docker login registry.mycompany.com 
@@ -464,8 +464,6 @@ All exposed ports are published and assigned a random port on the docker host's 
     $ docker port my_nginx 80
 
 ####Publishing ports manually
-
-This uses the official nginx image ([https://registry.hub.docker.com/_/nginx/](https://registry.hub.docker.com/_/nginx/))
 
     $ docker pull nginx
 
