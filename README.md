@@ -16,7 +16,7 @@ I recommend using virtualbox+`docker-machine`+docker bare binaries to get up and
 
 [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads) - Yes it is slow, but it is free. I use it and can help with it better than any other virtualization solution. use with boot2docker, docker-machine, or bring your own VM.
 
-<small>gets you: a quick [enough] way to run docker</small>
+<small>\small{gets you: a quick [enough] way to run docker}</small>
 
 ###docker-machine (windows, linux, osx)
 
@@ -32,7 +32,7 @@ Download the binary and put it in your `PATH`:
 4. run `docker $(docker-machine config dev) ps`
 5. run `docker-machine env dev` to get shell exports (if you want)
 
-<small>gets you: a docker daemon/host running in a local VM or a cloud provider. You will need to install the docker binary for use on the CLI separately/manually.</small>
+<small>\small{gets you: a docker daemon/host running in a local VM or a cloud provider. You will need to install the docker binary for use on the CLI separately/manually.}</small>
 
 ###bare docker binaries
 
@@ -52,7 +52,7 @@ Follow normal docker installation instructions (same for a real server and for y
  * [http://docs.docker.com/installation/centos/](http://docs.docker.com/installation/centos/)
  * [http://docs.docker.com/installation/debian/](http://docs.docker.com/installation/debian/)
 
-<small>gets you: a docker daemon/host running locally, and the docker command in your `PATH`</small>
+<small>\small{gets you: a docker daemon/host running locally, and the docker command in your `PATH`}</small>
 
 ###boot2docker (osx, windows)
 
@@ -476,15 +476,17 @@ Open your browser to <docker_ip>:<port> and you should see the nginx default pag
 
 ####Exposing ports explicitly
 
-random ports can suck sometimes.
+Random ports can suck sometimes.
 
     $ docker run --name my_nginx -d -p 8080:80 nginx
     # port 8080 on the host will be mapped to port 80 on the container
 
 ####Exposing a range of ports
-TODO: more to come on this since it is new in 1.5
+
+(Will be possible in Docker 1.5)
 
 ###Network Links!
+
 Links are awesome. When you link a container to another, it can see that other container’s network services, access it by name, and see its environment variables.
 
 Fire up a MySQL server for wordpress
@@ -492,14 +494,14 @@ Fire up a MySQL server for wordpress
     $ docker run --name insecure_mysql -e \
     MYSQL_ROOT_PASSWORD=secret -d mysql
 
-(normally we don't run this image quite like this with the root password out in the clear. just stay with me for the example)
+(Normally we don't run this image quite like this with the root password out in the clear. Just stay with me for the example)
 
 Fire up wordpress
 
     $ docker run --name example_wordpress --link \
     insecure_mysql:mysql -p 8080:80 -d wordpress
 
-Now you can visit [http://<host_ip>:8080/](http://<host_ip>:8080/) in your browser and complete the wordpress setup.
+Now you can visit [http://docker_host_ip:8080/](http://docker_host_ip:8080/) in your browser and complete the wordpress setup.
 
 What did the link get us?
 
