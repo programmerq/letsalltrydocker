@@ -1,5 +1,3 @@
-<div>
-
 #Let’s All Check out Docker
 
 ##Installation
@@ -16,7 +14,7 @@ I recommend using virtualbox+`docker-machine`+docker bare binaries to get up and
 
 ###virtualbox
 
-https://www.virtualbox.org/wiki/Downloads - Yes it is slow, but it is free. I use it and can help with it better than any other virtualization solution. use with boot2docker, docker-machine, or bring your own VM.
+[https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads) - Yes it is slow, but it is free. I use it and can help with it better than any other virtualization solution. use with boot2docker, docker-machine, or bring your own VM.
 
 <small>gets you: a quick [enough] way to run docker</small>
 
@@ -26,7 +24,7 @@ This will succeed boot2docker (cli portion) - gets you a docker host and helps y
 
 Download the binary and put it in your `PATH`:
 
-https://github.com/docker/machine/releases
+[https://github.com/docker/machine/releases](https://github.com/docker/machine/releases)
 
 1. install virtualbox
 2. put docker-machine in your `PATH`
@@ -38,23 +36,27 @@ https://github.com/docker/machine/releases
 
 ###bare docker binaries
 
-handy if you don’t want to use an installer to get the docker command: https://github.com/docker/docker/releases
+handy if you don’t want to use an installer to get the docker command: [https://github.com/docker/docker/releases](https://github.com/docker/docker/releases)
 
 gets you: the docker command in your `PATH`. If on a linux machine, can launch the daemon as well. For non-linux machines, you get a binary that works as the client only.
+
+\vfill
+\vbox{}
+\columnbreak
 
 ###Linux Native
 
 Follow normal docker installation instructions (same for a real server and for your linux laptop)
 
- * http://docs.docker.com/installation/ubuntulinux/
- * http://docs.docker.com/installation/centos/
- * http://docs.docker.com/installation/debian/
+ * [http://docs.docker.com/installation/ubuntulinux/](http://docs.docker.com/installation/ubuntulinux/)
+ * [http://docs.docker.com/installation/centos/](http://docs.docker.com/installation/centos/)
+ * [http://docs.docker.com/installation/debian/](http://docs.docker.com/installation/debian/)
 
 <small>gets you: a docker daemon/host running locally, and the docker command in your `PATH`</small>
 
 ###boot2docker (osx, windows)
 
-http://boot2docker.io/ - nice wrapper/installer that gets you a docker CLI binary and a boot2docker binary. Sets up a virtualbox VM based on a very small iso to run docker.
+[http://boot2docker.io/](http://boot2docker.io/) - nice wrapper/installer that gets you a docker CLI binary and a boot2docker binary. Sets up a virtualbox VM based on a very small iso to run docker.
 
 gets you: a docker daemon/host running in a vbox vm, the docker command and the boot2docker command in your `PATH`
 
@@ -65,6 +67,10 @@ gets you: a docker daemon/host running in a vbox vm, the docker command and the 
 
 The boot2docker CLI is still in widespread use, but `docker-machine` will overtake it.
 
+\vfill
+\vbox{}
+\pagebreak
+
 ##Docker Basics
 ###Verify your setup
 You should be able to run the following commands and get similar output:
@@ -73,7 +79,7 @@ You should be able to run the following commands and get similar output:
     <a bunch of usage info>
     $ docker ps
 
-(`permission denied on /var/run/docker.sock` means you have to add your user to the docker group, or run docker as sudo).
+(permission denied on `/var/run/docker.sock` means you have to add your user to the docker group, or run docker as sudo).
 `docker ps` communicates with the docker daemon and returns a list of running containers. We have none on an empty docker host
 
 ###Docker daemon info
@@ -83,7 +89,9 @@ You should be able to run the following commands and get similar output:
     $ docker version
     # gives version info about the client and server
     $ docker events
-    # streams events that happen in the docker host. (see also /var/log/docker on the host)
+    # streams events that happen in the docker host.
+
+(see also /var/log/docker on the host)
 
 ###Running a Container
 
@@ -139,8 +147,10 @@ Hint: you can try running bash inside a few different image types: `debian`, `bu
 
 ###Interacting with containers
 
-    $ docker run -d ubuntu /bin/bash -c ‘while true; do date; sleep 5; done’
-    f8d9b1774e59c052c37ddadde82b344967b538b38158f82c2aaeffb9439ae4f5
+    $ docker run -d ubuntu /bin/bash \
+    -c ‘while true; do date; sleep 5; done’
+    f8d9b1774e59c052c37ddadde82b344967b538b38158f82c2aa
+    effb9439ae4f5
     $
 
 now we can see a real running container:
@@ -153,8 +163,10 @@ Notice the funny name-- I got `drunk_goldstine`. What did you get? The long ID s
 
 you can specify a name with `--name`
 
-    $ docker run --name datesleep -d ubuntu /bin/bash -c 'while true; do date; sleep 5; done'
-    200620b0b60e66054a785bef53af964c1754793ef823b1033cd3d71bee2ecabe
+    $ docker run --name datesleep -d ubuntu /bin/bash \
+    -c 'while true; do date; sleep 5; done'
+    200620b0b60e66054a785bef53af964c1754793ef823b1033cd
+    3d71bee2ecabe
     $ docker ps
 
 ###Commands you can run against containers
@@ -172,8 +184,14 @@ I use the previously created `datesleep` container for most of these examples. U
 ####stop
 
     $ docker stop datesleep
-    $ docker ps # no more datesleep listed, but it isn’t gone
-    $ docker ps -a # show all containers, including stopped 
+
+no more datesleep listed after stop, but it isn’t gone
+
+    $ docker ps
+
+show all containers, including stopped 
+
+    $ docker ps -a
 
 ####start
 
@@ -187,7 +205,8 @@ I use the previously created `datesleep` container for most of these examples. U
 
 Attach a new command to an existing container.
 
-    $ docker exec [-i] [-t] [-d] <container_name|container_id> <command>
+    $ docker exec [-i] [-t] [-d] \
+    <container_name|container_id> <command>
     $ docker exec -it datesleep /bin/bash
     $ docker exec datesleep env
     $ docker exec datesleep ps faux
@@ -206,7 +225,8 @@ rm fails on a running container unless you specify -f
 ####kill
 
     $ docker kill datesleep
-    # like stop, but jumps straight to SIGKILL or whatever signal you specify with -s
+    
+This is like stop, but jumps straight to `SIGKILL` or whatever signal you specify with `-s`
 
 ####removing all containers
 
@@ -239,7 +259,8 @@ rm fails on a running container unless you specify -f
 ####cp
 
     $ docker cp datesleep:/etc/passwd .
-    # is the destination a file? directory? on the box running the cli? on the host?
+
+Is the destination a file? directory? on the box running the cli? on the host?
 
 ####inspect
 
@@ -281,7 +302,8 @@ Each layer has an id. there is an image name and a tag name.
 ####commit
 
     $ docker commit step1 ts
-    11d4b36a6d721a0e63666843a1aaa0db08c04c2864432a0e1312ca666ea4be65
+    11d4b36a6d721a0e63666843a1aaa0db08c04c2864432a0e131
+    2ca666ea4be65
     $ docker images # ts is listed with its id.
 
 ####tag
@@ -304,9 +326,17 @@ Each layer has an id. there is an image name and a tag name.
 
 ####deleting the image
 
-    $ docker rmi ts         # remove the image called 'ts'
-    $ docker rmi ts:latest  # equivalent to 'docker rmi ts'
-    $ docker rmi -f ts      # -f forces image deletion, similar to docker rm -f container
+remove the image called 'ts'
+
+    $ docker rmi ts
+
+equivalent to 'docker rmi ts'
+
+    $ docker rmi ts:latest
+
+`-f` forces image deletion, similar to `docker rm -f` container
+
+    $ docker rmi -f ts
 
 ###Even more stuff about images (Dockerfiles!)
 
@@ -349,7 +379,7 @@ Now, run the following:
 
 ### More on Dockerfile syntax
 
-Full docs here: http://docs.docker.com/reference/builder/
+Full docs here: [http://docs.docker.com/reference/builder/](http://docs.docker.com/reference/builder/)
 
 ####Dockerfile ADD
 
@@ -377,11 +407,15 @@ set an environment variable (takes place for subsequent build steps, *and* the f
 
     ENV MY_AWESOME_VAR "foobar"
 
+\vfill
+\vbox{}
+\newpage
+
 ## Moving images around
 
 ###Image namespacing and the docker hub
 
-Create an account at https://hub.docker.com/. Now, build an image with your username namespaced:
+Create an account at [https://hub.docker.com/](https://hub.docker.com/). Now, build an image with your username namespaced:
 
     $ docker build -t <username>/my_first_image .
 
@@ -393,20 +427,20 @@ push the image:
 
     $ docker push <username>/my_first_image
 
-It is now publically online for anyone to see/download: https://registry.hub.docker.com/u/<username>/my_first_image/
+It is now publically online for anyone to see/download: [https://registry.hub.docker.com/u/<username>/my_first_image/](https://registry.hub.docker.com/u/<username>/my_first_image/)
 
 ###Private Registry
 
-You can run your own registry server (https://github.com/docker/docker-registry). If you have one running at https://registry.mycompany.com/, then registry.mycompany.com is the namespace for the image name.
+You can run your own registry server ([https://github.com/docker/docker-registry](https://github.com/docker/docker-registry)). If you have one running at [https://registry.mycompany.com/,](https://registry.mycompany.com/,) then registry.mycompany.com is the namespace for the image name.
 
     $ docker build -t registry.mycompany.com/apache
-    $ docker login registry.mycompany.com # if you have authentication set up
+    $ docker login registry.mycompany.com 
     $ docker push registry.mycompany.com/apache
 
 ##Networking!
 
 We like to containerize things that tend to be network services.
-Many examples show docker containers being accessed on 127.0.0.1. That does not always work. with boot2docker, you can find the ip by running `boot2docker ip`. With docker machine, you can find it by running `docker-machine ip`
+Many examples show docker containers being accessed on 127.0.0.1. That does not always work. With boot2docker, you can find the ip by running `boot2docker ip`. With docker machine, you can find it by running `docker-machine ip`
 
 This section uses docker images: `nginx`, `wordpress`, and `mysql`
 
@@ -431,7 +465,7 @@ All exposed ports are published and assigned a random port on the docker host's 
 
 ####Publishing ports manually
 
-This uses the official nginx image (https://registry.hub.docker.com/_/nginx/):
+This uses the official nginx image ([https://registry.hub.docker.com/_/nginx/](https://registry.hub.docker.com/_/nginx/))
 
     $ docker pull nginx
 
@@ -455,17 +489,19 @@ TODO: more to come on this since it is new in 1.5
 ###Network Links!
 Links are awesome. When you link a container to another, it can see that other container’s network services, access it by name, and see its environment variables.
 
-Fire up a MySQL server for wordpress (https://registry.hub.docker.com/_/mysql/)
+Fire up a MySQL server for wordpress
 
-    $ docker run --name insecure_mysql -e MYSQL_ROOT_PASSWORD=secret -d mysql
+    $ docker run --name insecure_mysql -e \
+    MYSQL_ROOT_PASSWORD=secret -d mysql
 
 (normally we don't run this image quite like this with the root password out in the clear. just stay with me for the example)
 
-Fire up wordpress (https://registry.hub.docker.com/_/wordpress/)
+Fire up wordpress
 
-    $ docker run --name example_wordpress --link insecure_mysql:mysql -p 8080:80 -d wordpress
+    $ docker run --name example_wordpress --link \
+    insecure_mysql:mysql -p 8080:80 -d wordpress
 
-now you can visit http://<host_ip>:8080/ in your browser and complete the wordpress setup.
+Now you can visit [http://<host_ip>:8080/](http://<host_ip>:8080/) in your browser and complete the wordpress setup.
 
 What did the link get us?
 
@@ -474,9 +510,13 @@ What did the link get us?
 
 ###Ambassador pattern
 
-Full info here: https://docs.docker.com/articles/ambassador_pattern_linking/
+Full info here: [https://docs.docker.com/articles/ambassador_pattern_linking/](https://docs.docker.com/articles/ambassador_pattern_linking/)
 
 tldr: link a wordpress container to an "ambassador" container, which proxies to the real mysql container.
+
+\vfill
+\vbox{}
+\pagebreak
 
 ##Volumes
 
@@ -494,40 +534,52 @@ You can also specify a `VOLUME` inside a `Dockerfile`
 
 Run these in two separate terminals
 
-    $ docker run --name one -it -v /myvolume debian /bin/bash
+    $ docker run --name one -it -v /myvolume \
+    debian /bin/bash
 
-    $ docker run --name two -it --volumes-from one debian /bin/bash
+    $ docker run --name two -it --volumes-from one \
+    debian /bin/bash
 
-write a file in `one`, it will be visible in `two`
+Write a file in `one`, it will be visible in `two`
 
 ###Data container pattern
 
+Note I don't actually start the container named `data`. It only needs to exist:
+
     $ docker create --name data -v /var/lib/mysql busybox
-    # note I didn't start this container. It only needs to exist
-    $ docker run -d --name my_mysql -e MYSQL_ROOT_PASSWORD=pass --volumes-from data -P mysql
-    # can insert stuff into the db at this point
+    $ docker run -d --name my_mysql -e \
+    MYSQL_ROOT_PASSWORD=pass --volumes-from data -P mysql
+    # now we can insert stuff into the db
     $ docker rm -f my_mysql # remove the container
-    $ docker run -d --name second_mysql -e MYSQL_ROOT_PASSWORD=pass --volumes-from data -P mysql
+    $ docker run -d --name second_mysql -e \
+    MYSQL_ROOT_PASSWORD=pass --volumes-from data -P mysql
     # and access the same data again.
 
 ###Host directory as a volume
 
-    $ docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -P -d nginx
-    # note that /some/content is read from the docker host, and not from where you run the docker command.
+    $ docker run --name some-nginx -v \
+    /some/content:/usr/share/nginx/html:ro -P -d nginx
+    # note that /some/content is read from the docker host
+    # and not from where you run the docker command.
     $ echo "hello" > /some/content/foo.txt
     $ curl <docker_host>:<nginx_port>/foo.txt
 
-##Fig
+\vfill
+\vbox{}
+\columnbreak
 
-An orchestration tool to run all these `create`/`start`/`stop`/`build`/`--link`/`-p`,`-v` commands!
+##Docker-compose
 
-http://www.fig.sh/
+An orchestration tool to start all our containers! Currently being renamed from fig.
 
-To install: `sudo pip install -U fig` (other install methods on the site)
+[http://www.fig.sh/](http://www.fig.sh/)
 
-###Wordpress example, but with fig
+To install, follow instructions at [https://github.com/docker/fig/releases](https://github.com/docker/fig/releases).
 
-Create a file in an empty directory called `fig.yml`:
+
+###Wordpress example, but with docker-compose
+
+Create a file in an empty directory called `docker-compose.yml`:
 
     wordpress:
       image: wordpress
@@ -540,7 +592,7 @@ Create a file in an empty directory called `fig.yml`:
 
 Now run:
 
-    $ fig up
+    $ docker-compose up
 
 
 ##Security
@@ -554,11 +606,10 @@ Effectively gives the container real root.
 
 The docker daemon is root, and we can get to just about anything we want:
 
-    $ docker run --privileged -v /:/hostroot -i -t ubuntu /bin/bash
+    $ docker run --privileged -v /:/hostroot \
+    -i -t ubuntu /bin/bash
 
 ##Resource Management
-
-TODO: add examples
 
 ###Weighted CPU shares
 
@@ -569,4 +620,5 @@ TODO: add examples
     docker run -m 2g
     docker run --memory-swap=2g
 
-</div>
+\vfill
+\vbox{}

@@ -1,4 +1,10 @@
 \usepackage{multicol}
+\usepackage{flushend}
+
 \makeatletter
-\def\verbatim{\small\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\def\verbatim{\small\definecolor{shadecolor}{rgb}{.9, .9, .9}\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
 \makeatother
+
+%\makeatletter
+%\def\verbatim{\small\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+%\makeatother
