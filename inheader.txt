@@ -1,10 +1,23 @@
 \usepackage{multicol}
 \usepackage{flushend}
+\usepackage{xcolor}
+
+\definecolor{verbatim}{rgb}{0.99, 0.97, 0.93}
+\definecolor{grey}{rgb}{0.4, 0.4, 0.4}
 
 \makeatletter
-\def\verbatim{\small\definecolor{shadecolor}{rgb}{.9, .9, .9}\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\def\verbatim{\small \@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
 \makeatother
+
+\newenvironment{note}%
+{\small\textcolor{grey}}
+
+\newcommand{\mybox}[1]{\small\par\noindent\colorbox{liter}%
+{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{#1}}}
 
 %\makeatletter
 %\def\verbatim{\small\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
 %\makeatother
+
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}

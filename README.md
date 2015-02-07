@@ -4,7 +4,7 @@
 
 Lots of combinations to get docker running from your laptops!
 
-Docker has a host and a client. The host runs on linux x86_64 on any 3.8 or newer kernel. (the centos6.5/rhel6.5 kernel does work though).
+Docker has a host and a client. The host runs on linux x86\_64 on any 3.8 or newer kernel. (the centos6.5/rhel6.5 kernel does work though).
 
 The docker binary is both the host and client.
 
@@ -16,7 +16,7 @@ I recommend using virtualbox+`docker-machine`+docker bare binaries to get up and
 
 [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads) - Yes it is slow, but it is free. I use it and can help with it better than any other virtualization solution. use with boot2docker, docker-machine, or bring your own VM.
 
-<small>\small{gets you: a quick [enough] way to run docker}</small>
+<small>\begin{note}{gets you: a quick [enough] way to run docker}\end{note}</small>
 
 ###docker-machine (windows, linux, osx)
 
@@ -32,7 +32,7 @@ Download the binary and put it in your `PATH`:
 4. run `docker $(docker-machine config dev) ps`
 5. run `docker-machine env dev` to get shell exports (if you want)
 
-<small>\small{gets you: a docker daemon/host running in a local VM or a cloud provider. You will need to install the docker binary for use on the CLI separately/manually.}</small>
+<small>\begin{note}{gets you: a docker daemon/host running in a local VM or a cloud provider. You will need to install the docker binary for use on the CLI separately/manually.}\end{note}</small>
 
 ###bare docker binaries
 
@@ -52,7 +52,7 @@ Follow normal docker installation instructions (same for a real server and for y
  * [http://docs.docker.com/installation/centos/](http://docs.docker.com/installation/centos/)
  * [http://docs.docker.com/installation/debian/](http://docs.docker.com/installation/debian/)
 
-<small>\small{gets you: a docker daemon/host running locally, and the docker command in your `PATH`}</small>
+<small>\begin{note}{gets you: a docker daemon/host running locally, and the docker command in your `PATH`}\end{note}</small>
 
 ###boot2docker (osx, windows)
 
@@ -184,13 +184,9 @@ I use the previously created `datesleep` container for most of these examples. U
 ####stop
 
     $ docker stop datesleep
-
-no more datesleep listed after stop, but it isn’t gone
-
+    #no more datesleep listed after stop, but it isn’t gone
     $ docker ps
-
-show all containers, including stopped 
-
+    #show all containers, including stopped 
     $ docker ps -a
 
 ####start
@@ -217,7 +213,7 @@ Attach a new command to an existing container.
     datesleep
     $ docker ps -a | grep datesleep # no results
 
-rm fails on a running container unless you specify -f
+rm fails on a running container unless you specify `-f`
 
     $ docker rm -f drunk_goldstine
     drunk_goldstine
@@ -250,7 +246,7 @@ This is like stop, but jumps straight to `SIGKILL` or whatever signal you specif
     $ docker attach datesleep
     # remember we started datesleep in detached mode
 
-(hit `ctrl+p` `ctrl+q` to detach again)
+(depending how a container was started, try `ctrl+p` `ctrl+q`, `ctrl+c`, or simply kill your window where you ran `docker attach` to detach again)
 
 ####rename (new in 1.5)
 
@@ -440,9 +436,9 @@ You can run your own registry server ([https://github.com/docker/docker-registry
 ##Networking!
 
 We like to containerize things that tend to be network services.
-Many examples show docker containers being accessed on 127.0.0.1. That does not always work. With boot2docker, you can find the ip by running `boot2docker ip`. With docker machine, you can find it by running `docker-machine ip`
+Many examples show docker containers being accessed on `127.0.0.1`. That does not always work. With boot2docker, you can find the ip by running `boot2docker ip`. With docker machine, you can find it by running `docker-machine ip`
 
-This section uses docker images: `nginx`, `wordpress`, and `mysql`
+<!--This section uses docker images: `nginx`, `wordpress`, and `mysql`-->
 
 ###Exposing vs Publishing ports
 
@@ -476,10 +472,10 @@ Open your browser to <docker_ip>:<port> and you should see the nginx default pag
 
 ####Exposing ports explicitly
 
-Random ports can suck sometimes.
+Random ports can suck sometimes. Force port 80 on the container to be mapped to 8080.
 
     $ docker run --name my_nginx -d -p 8080:80 nginx
-    # port 8080 on the host will be mapped to port 80 on the container
+
 
 ####Exposing a range of ports
 
@@ -506,7 +502,9 @@ Now you can visit [http://docker_host_ip:8080/](http://docker_host_ip:8080/) in 
 What did the link get us?
 
     $ docker exec example_wordpress env
-    $ docker exec example_wordpress ping -c 1 mysql # /etc/hosts trick does this.
+    $ docker exec example_wordpress ping -c 1 mysql
+   
+An /etc/hosts trick makes it so we can ping links by name.
 
 ###Ambassador pattern
 
@@ -564,6 +562,10 @@ Note I don't actually start the container named `data`. It only needs to exist:
     $ echo "hello" > /some/content/foo.txt
     $ curl <docker_host>:<nginx_port>/foo.txt
 
+##Docker-swarm
+
+Runs the docker API in front of several real docker hosts. You interact with it normally, and it deals with scheduling containers across all the docker hosts in the cluster. In alpha and active development. [https://github.com/docker/swarm/](https://github.com/docker/swarm/)
+
 \vfill
 \vbox{}
 \columnbreak
@@ -593,7 +595,6 @@ Create a file in an empty directory called `docker-compose.yml`:
 Now run:
 
     $ docker-compose up
-
 
 ##Security
 ###Privileged mode
