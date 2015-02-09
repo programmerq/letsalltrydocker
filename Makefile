@@ -11,3 +11,6 @@ handout.tex: handout.md default.latex beforebody.txt afterbody.txt inheader.txt 
 
 handout.html: handout.md buttondown.css
 	cat handout.md | pandoc -f markdown -t html -c buttondown.css -o handout.html
+
+instructions.html: instructions.md buttondown.css
+	cat instructions.md | pandoc -f markdown -t html -c buttondown.css -o instructions.html
