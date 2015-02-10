@@ -14,3 +14,6 @@ handout.html: handout.md buttondown.css
 
 instructions.html: instructions.md buttondown.css
 	cat instructions.md | pandoc -f markdown -t html -c buttondown.css -o instructions.html
+
+clean:
+	rm -f *.aux *.log *.odt *.out *.pdf *.tex *.html
