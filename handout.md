@@ -4,13 +4,15 @@
 
 Lots of combinations to get docker running from your laptops!
 
-Docker has a host and a client. The host runs on linux x86\_64 on any 3.8 or newer kernel. (the centos6.5/rhel6.5 kernel does work though).
+Docker has a host and a client. The host runs on linux x86\_64 on any 3.8 or newer kernel. (the centos7.4/rhel7.4 kernel does work though).
 
 The docker binary is both the host and client.
 
 [http://docs.docker.com/installation/](http://docs.docker.com/installation/) - official installation docs (the sparse info here isn't enough on its own)
 
-I recommend using virtualbox+`docker-machine`+docker bare binaries to get up and running!
+If you are running Windows 10 Pro, I recommend installing [Docker for Windows](https://www.docker.com/docker-windows). If you are running MacOS, I recommend [Docker for Mac](https://www.docker.com/docker-mac).
+
+If you are on Windows 10 Home, or previous versions of Windows, then [Docker Toolbox](https://www.docker.com/products/docker-toolbox) is a quick way to get Virtualbox, the `docker` CLI, `docker-machine`, and a running VM with Docker installed and running.
 
 ###virtualbox
 
@@ -53,19 +55,6 @@ Follow normal docker installation instructions (same for a real server and for y
  * [http://docs.docker.com/installation/debian/](http://docs.docker.com/installation/debian/)
 
 <small>\begin{note}{gets you: a docker daemon/host running locally, and the docker command in your `PATH`}\end{note}</small>
-
-###boot2docker (osx, windows)
-
-[http://boot2docker.io/](http://boot2docker.io/) - nice wrapper/installer that gets you a docker CLI binary and a boot2docker binary. Sets up a virtualbox VM based on a very small iso to run docker.
-
-gets you: a docker daemon/host running in a vbox vm, the docker command and the boot2docker command in your `PATH`
-
-1. install virtualbox
-2. install boot2docker
-3. run `boot2docker init`
-4. run `boot2docker shellinit` to get shell exports
-
-The boot2docker CLI is still in widespread use, but `docker-machine` will overtake it.
 
 \vfill
 \vbox{}
@@ -132,6 +121,8 @@ Also, try doing `search` and `pull` on debian.
     $ docker run -i -t ubuntu /bin/bash -l
     root@bd84701e04a3:/#
 
+The `-i` attaches standard input, and `-t` allocates a pseudo-tty, which the `bash` process expects for interactive sessions.
+
 You can do stuff. Try some different commands:
 
     # ps faux
@@ -168,6 +159,16 @@ you can specify a name with `--name`
     200620b0b60e66054a785bef53af964c1754793ef823b1033cd
     3d71bee2ecabe
     $ docker ps
+
+###Getting Help
+
+Every `docker` command has a very helpful --help section. Try it out:
+
+    docker --help
+    docker run --help
+    docker ps --help
+
+The answer to many common questions is found in the corresponding --help output!
 
 ###Commands you can run against containers
 
@@ -248,7 +249,7 @@ This is like stop, but jumps straight to `SIGKILL` or whatever signal you specif
 
 (depending how a container was started, try `ctrl+p` `ctrl+q`, `ctrl+c`, or simply kill your window where you ran `docker attach` to detach again)
 
-####rename (new in 1.5)
+####rename
 
     $ docker rename datesleep endlessloop
 
@@ -297,6 +298,8 @@ Each layer has an id. there is an image name and a tag name.
 
 ####commit
 
+> As a side note, using `docker commit` isn't a common workflow and is usually only something I recommend for times like now when you want to learn about how the image layers are created. The normal process for creating images and new image layers will be using `docker build` which is discussed later.
+
     $ docker commit step1 ts
     11d4b36a6d721a0e63666843a1aaa0db08c04c2864432a0e131
     2ca666ea4be65
@@ -336,8 +339,7 @@ equivalent to 'docker rmi ts'
 
 ###Even more stuff about images (Dockerfiles!)
 
-manually running and committing isn’t the best interface to creating images.
-This section uses docker images ubuntu and apache
+Manually running and committing isn’t the best interface to creating images.
 
 ####build / Dockerfile
 
@@ -375,7 +377,7 @@ Now, run the following:
 
 ### More on Dockerfile syntax
 
-Full docs here: [http://docs.docker.com/reference/builder/](http://docs.docker.com/reference/builder/)
+Full docs here: [http://docs.docker.com/engine/reference/builder/](http://docs.docker.com/engine/reference/builder/)
 
 ####Dockerfile ADD
 
@@ -393,7 +395,7 @@ Similar to add, but doesn’t take a URL nor will it handle untarring/uncompress
 
 ####Dockerfile EXPOSE
 
-Explicitly specify ports that the container listens on.
+Explicitly specify ports that the container listens on. This sets metadata in the image about what the containerized application is expected to listen on, but doesn't do any enforcement and doesn't provide any sort of guarantee.
 
     EXPOSE 80
 
@@ -427,7 +429,7 @@ It is now publically online for anyone to see/download: [https://registry.hub.do
 
 ###Private Registry
 
-You can run your own registry server ([https://github.com/docker/docker-registry](https://github.com/docker/docker-registry)).
+You can run your own registry server ([https://github.com/docker/distribution](https://github.com/docker/distribution)).
 
     $ docker build -t registry.mycompany.com/apache
     $ docker login registry.mycompany.com 
@@ -477,40 +479,37 @@ Random ports can suck sometimes. Force port 80 on the container to be mapped to 
     $ docker run --name my_nginx -d -p 8080:80 nginx
 
 
-####Exposing a range of ports
+###Networks and Service Discovery!
 
-(Will be possible in Docker 1.5)
+First, create a custom network:
 
-###Network Links!
-
-Links are awesome. When you link a container to another, it can see that other container’s network services, access it by name, and see its environment variables.
+    $ docker network create -d bridge mynet 
 
 Fire up a MySQL server for wordpress
 
-    $ docker run --name insecure_mysql -e \
+    $ docker run --net mynet \
+    --name mysql -e \
     MYSQL_ROOT_PASSWORD=secret -d mysql
 
 (Normally we don't run this image quite like this with the root password out in the clear. Just stay with me for the example)
 
 Fire up wordpress
 
-    $ docker run --name example_wordpress --link \
-    insecure_mysql:mysql -p 8080:80 -d wordpress
+    $ docker run --net mynet \
+    --name example_wordpress \
+    --env WORDPRESS_DB_HOST=mysql \
+    --env WORDPRESS_DB_PASSWORD=secret \
+    -p 8080:80 -d wordpress
 
 Now you can visit [http://docker_host_ip:8080/](http://docker_host_ip:8080/) in your browser and complete the wordpress setup.
 
-What did the link get us?
+How did wordpress find the 'mysql' host?
 
-    $ docker exec example_wordpress env
+    $ docker exec example_wordpress cat /etc/resolv.conf
+
+When using a network created by the `docker network create` interface, all containers get configured to use the 127.0.0.11 internal DNS resolver. This DNS server is run by docker, and will resolve any container connected on that network if you look it up by its `--name`.
+
     $ docker exec example_wordpress ping -c 1 mysql
-   
-An /etc/hosts trick makes it so we can ping links by name.
-
-###Ambassador pattern
-
-Full info here: [https://docs.docker.com/articles/ambassador_pattern_linking/](https://docs.docker.com/articles/ambassador_pattern_linking/)
-
-tldr: link a wordpress container to an "ambassador" container, which proxies to the real mysql container.
 
 \vfill
 \vbox{}
